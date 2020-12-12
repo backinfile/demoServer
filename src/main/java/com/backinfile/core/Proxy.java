@@ -41,6 +41,7 @@ public class Proxy {
 			CtMethod ctMethod = new CtMethod(m.getReturnType(), m.getName(), m.getParameterTypes(), curClass);
 			ctMethod.setModifiers(Modifier.PUBLIC);
 			ctMethod.setBody("{System.out.println(\"in ctMethod\");}");
+			ctMethod.set
 			curClass.addMethod(ctMethod);
 		}
 
