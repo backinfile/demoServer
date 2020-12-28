@@ -6,4 +6,6 @@ import org.slf4j.LoggerFactory;
 public class Log {
 	public static Logger Core = LoggerFactory.getLogger("CORE");
 	public static Logger Game = LoggerFactory.getLogger("GAME");
+	public static Logger Gen = LoggerFactory.getLogger("GEN");
+	public static Logger Rank = LoggerFactory.getLogger("RANK");
 }

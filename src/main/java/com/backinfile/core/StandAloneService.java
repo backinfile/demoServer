@@ -5,11 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
- * 标记一个service上的一个函数为代理函数
+ * 标记一个service独占一个Port
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface ProxyMethod {
+@Target(ElementType.TYPE)
+public @interface StandAloneService {
+
 }
