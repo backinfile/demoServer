@@ -9,7 +9,7 @@ public interface ITerminal {
 
 	Call getLastInCall();
 
-	void sendNewCall(CallPoint to, String method, Object[] args);
+	void sendNewCall(CallPoint to, int method, Object[] args);
 
 	void returns(Object... values);
 

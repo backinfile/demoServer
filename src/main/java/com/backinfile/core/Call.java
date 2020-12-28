@@ -10,7 +10,7 @@ public class Call implements ISerializable {
 	public CallPoint from;
 	public CallPoint to;
 
-	public String method = "";
+	public int method;
 	public Object[] args = null;
 
 	public long expireTime = 0L;

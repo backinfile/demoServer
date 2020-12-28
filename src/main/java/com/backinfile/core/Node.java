@@ -113,7 +113,7 @@ public class Node {
 		callPoint.nodeID = Distr.getDefaultNodeId();
 		Port curPort = Port.getCurrentPort();
 		callPoint.portID = curPort.getPortId();
-		callPoint.serviceID = 0L;
+		callPoint.serviceID = curPort.getCurService().getServiceId();
 		return callPoint;
 	}
 

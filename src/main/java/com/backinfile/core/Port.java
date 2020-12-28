@@ -194,7 +194,7 @@ public class Port implements Delayed, ITerminal {
 	}
 
 	@Override
-	public void sendNewCall(CallPoint to, String method, Object[] args) {
+	public void sendNewCall(CallPoint to, int method, Object[] args) {
 		terminal.sendNewCall(to, method, args);
 	}
 

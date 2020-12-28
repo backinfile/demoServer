@@ -40,7 +40,7 @@ public class Terminal implements ITerminal {
 	}
 
 	@Override
-	public void sendNewCall(CallPoint to, String method, Object[] args) {
+	public void sendNewCall(CallPoint to, int method, Object[] args) {
 		Call call = new Call();
 		call.from = Node.getCurCallPoint();
 		call.to = to;

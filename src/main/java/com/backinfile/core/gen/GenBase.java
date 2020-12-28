@@ -25,7 +25,7 @@ public abstract class GenBase {
 	private String templateFileName = "";
 	private String targetPackagePath = "";
 	private String fileName = "";
-	private static final String TemplateFileDir = "templates";
+	private static final String TemplateFileDir = "/templates";
 	private static final String projectPath = "src\\main\\java";
 
 	public boolean canGen = true;
@@ -34,13 +34,7 @@ public abstract class GenBase {
 
 		configuration = new Configuration(Configuration.VERSION_2_3_22);
 
-		try {
-			File dir = new File(GenBase.class.getClassLoader().getResource(TemplateFileDir).getPath());
-			configuration.setDirectoryForTemplateLoading(dir);
-		} catch (Exception e) {
-			canGen = false;
-			return;
-		}
+		configuration.setClassForTemplateLoading(GenBase.class, TemplateFileDir);
 		configuration.setDefaultEncoding("UTF-8");
 		configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 	}
@@ -64,6 +58,7 @@ public abstract class GenBase {
 		try {
 			temp = configuration.getTemplate(templateFileName);
 		} catch (IOException e) {
+			Log.Gen.error("load template error", e);
 			return ErrorCode.GEN_TEMPLATE_FILE_NOT_FOUND;
 		}
 

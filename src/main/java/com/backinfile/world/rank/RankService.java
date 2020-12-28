@@ -1,5 +1,7 @@
 package com.backinfile.world.rank;
 
+import java.util.ArrayList;
+
 import com.backinfile.core.AbstractService;
 import com.backinfile.core.ProxyMethod;
 import com.backinfile.core.StandAloneService;
@@ -14,6 +16,11 @@ public class RankService extends AbstractService {
 	@ProxyMethod
 	public void getTopHumanId() {
 		returns(123L);
+	}
+
+	@ProxyMethod
+	public void getTopHumanId(int num, int[] args, ArrayList<Integer> ints) {
+
 	}
 
 	@Override

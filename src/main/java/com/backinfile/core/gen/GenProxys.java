@@ -1,6 +1,5 @@
 package com.backinfile.core.gen;
 
-
 public class GenProxys extends GenBase {
 	public GenProxys() {
 		super();
