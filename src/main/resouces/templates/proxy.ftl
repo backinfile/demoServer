@@ -18,6 +18,11 @@ import ${import};
 </#list>
 
 public class ${className} extends ProxyBase {
+	
+<#if standalone>
+	public static final String PortId = "${oriClassFullName}";
+</#if>
+	
 	private CallPoint targetCallPoint;
 
 	private ${className}(CallPoint targetCallPoint) {
@@ -27,11 +32,15 @@ public class ${className} extends ProxyBase {
 
 <#if standalone>
 	public static ${className} newInstance() {
-		return new ${className}(new CallPoint(Distr.getDefaultNodeId(), "${oriClassFullName}", 0L));
+		return new ${className}(new CallPoint(Distr.getDefaultNodeId(), PortId, 0L));
 	}
 <#else>
-	public static ${className} newInstance(long serviceId) {
-		return new ${className}(new CallPoint(Distr.getDefaultNodeId(), "${oriClassFullName}", serviceId));
+	public static ${className} newInstance(String portId, long serviceId) {
+		return new ${className}(new CallPoint(Distr.getDefaultNodeId(), portId, serviceId));
+	}
+	
+	public static ${className} newInstance(CallPoint callPoint) {
+		return new ${className}(callPoint);
 	}
 </#if>
 

@@ -6,6 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.DelayQueue;
 
+import com.backinfile.core.serilize.InputStream;
+import com.backinfile.core.serilize.OutputStream;
 import com.backinfile.support.Log;
 import com.backinfile.utils.ReflectionUtils;
 import com.backinfile.utils.Utils2;
@@ -37,7 +39,7 @@ public class Node {
 		for (Class<?> clazz : classes) {
 			try {
 				IService service = (IService) clazz.getDeclaredConstructor(long.class).newInstance(0L);
-
+				service.syncStartup();
 				String portId = clazz.getName();
 				Port port = new Port(portId);
 				port.addService(service);
@@ -123,7 +125,7 @@ public class Node {
 
 	public void handleSendCall(Call call) {
 		if (!nodeId.equals(call.to.nodeID)) {
-			Log.Core.error("此call发送到未知node，已忽略");
+			Log.Core.error("此call发送到未知node({})，已忽略", call.to.nodeID);
 			return;
 		}
 
@@ -133,8 +135,17 @@ public class Node {
 			return;
 		}
 
-		port.addCall(call);
+		port.addCall(serializeCall(call));
 		awake(port);
+	}
+
+	public Call serializeCall(Call call) {
+		OutputStream outputStream = new OutputStream();
+		outputStream.write(call);
+		byte[] bytes = outputStream.getBytes();
+		InputStream inputStream = new InputStream(bytes);
+		Call newCall = inputStream.read();
+		return newCall;
 	}
 
 	public static Node getNode(String nodeId) {

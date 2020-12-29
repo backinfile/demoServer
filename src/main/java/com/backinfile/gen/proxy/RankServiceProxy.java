@@ -16,6 +16,9 @@ import com.backinfile.core.function.Action7;
 import com.backinfile.world.rank.RankService;
 
 public class RankServiceProxy extends ProxyBase {
+	
+	public static final String PortId = "com.backinfile.world.rank.RankService";
+	
 	private CallPoint targetCallPoint;
 
 	private RankServiceProxy(CallPoint targetCallPoint) {
@@ -24,7 +27,7 @@ public class RankServiceProxy extends ProxyBase {
 	}
 
 	public static RankServiceProxy newInstance() {
-		return new RankServiceProxy(new CallPoint(Distr.getDefaultNodeId(), "com.backinfile.world.rank.RankService", 0L));
+		return new RankServiceProxy(new CallPoint(Distr.getDefaultNodeId(), PortId, 0L));
 	}
 
     public void getTopHumanId() {

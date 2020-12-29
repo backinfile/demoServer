@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+option java_package = "com.backinfile.gen.pb";
+
+option optimize_for = CODE_SIZE;
+
+message DVector {
+	float X = 1;
+	float Y = 2;
+}
+
+
+message CSLogin {
+	string name = 1;
+}
+
+message SCLogin {
+	int32 errorCode = 2;
+}
+
+// 客户端掉线
+message SDisconnnect {
+}
+
+// 时间同步
+message CSSyncTime {
+	int64 curTime = 1;
+}
+message SCSyncTime {
+	int64 curTime = 1;
+}
+
+// --------------
+// 客户端操作
+// --------------
+
+message CSOper {
+	DVector targetPos = 1;
+}
+message CSFire {
+	DVector targetPos = 1;
+}
+
+
+// --------------
+// 服务器状态通知
+// --------------
+
+enum ObjectType {
+	Player = 0;
+	Bullet = 1;
+}
+
+message SCMove {
+	int64 id = 1;
+	ObjectType type = 2;
+	DVector targetPos = 3;
+	
+	int64 timeStart = 4;
+	int64 timeEnd = 5;
+}
+
+// 进入视野
+message SCEnterSight {
+	int64 id = 1;
+	ObjectType type = 2;
+	DVector pos = 3;
+}
+
+// 离开视野
+message SCLeaveSight {
+	int64 id = 1;
+	ObjectType type = 2;
+	DVector pos = 3;
+}
+
+
+// --------------
+// 游戏数据
+// --------------
+
+message SCEnterWorld {
+	DVector size = 1; // 世界大小
+	DVector pos = 2; // 出生位置
+}

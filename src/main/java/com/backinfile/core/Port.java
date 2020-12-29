@@ -105,8 +105,12 @@ public class Port implements Delayed, ITerminal {
 			IService service = servicesWaitForAdd.poll();
 			if (service == null)
 				break;
-			service.setPort(this);
-			services.put(service.getServiceId(), service);
+			if (services.containsKey(service.getServiceId())) {
+				Log.Core.error("service key duplicate!!");
+			} else {
+				service.setPort(this);
+				services.put(service.getServiceId(), service);
+			}
 		}
 		while (true) {
 			IService service = servicesWaitForRemove.poll();

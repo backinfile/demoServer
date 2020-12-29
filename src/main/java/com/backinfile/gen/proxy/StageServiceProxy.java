@@ -13,26 +13,29 @@ import com.backinfile.core.function.Action5;
 import com.backinfile.core.function.Action6;
 import com.backinfile.core.function.Action7;
 
-import com.backinfile.world.human.HumanGlobalService;
+import com.backinfile.world.stage.StageService;
 
-public class HumanGlobalServiceProxy extends ProxyBase {
+public class StageServiceProxy extends ProxyBase {
 	
-	public static final String PortId = "com.backinfile.world.human.HumanGlobalService";
 	
 	private CallPoint targetCallPoint;
 
-	private HumanGlobalServiceProxy(CallPoint targetCallPoint) {
+	private StageServiceProxy(CallPoint targetCallPoint) {
 		this.targetCallPoint = targetCallPoint;
 		this.m_port = Port.getCurrentPort();
 	}
 
-	public static HumanGlobalServiceProxy newInstance() {
-		return new HumanGlobalServiceProxy(new CallPoint(Distr.getDefaultNodeId(), PortId, 0L));
+	public static StageServiceProxy newInstance(String portId, long serviceId) {
+		return new StageServiceProxy(new CallPoint(Distr.getDefaultNodeId(), portId, serviceId));
+	}
+	
+	public static StageServiceProxy newInstance(CallPoint callPoint) {
+		return new StageServiceProxy(callPoint);
 	}
 
     @SuppressWarnings({"rawtypes"}) 
 	public Object getMethod(Object service, int methodKey) {
-		HumanGlobalService serv = (HumanGlobalService)service;
+		StageService serv = (StageService)service;
 		switch (methodKey) {
 		default:
 			break;

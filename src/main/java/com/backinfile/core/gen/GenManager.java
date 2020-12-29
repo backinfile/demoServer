@@ -10,6 +10,12 @@ public class GenManager {
 				Log.Gen.warn("生成失败 class={} code={}", GenProxyClass.class.getName(), code);
 			}
 		}
+		{
+			int code = new GenListeners().genFile();
+			if (code != 0) {
+				Log.Gen.warn("生成失败 class={} code={}", GenListeners.class.getName(), code);
+			}
+		}
 
 //		{
 //			int code = new GenProxys().genFile();

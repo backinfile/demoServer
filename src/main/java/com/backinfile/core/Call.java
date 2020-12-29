@@ -58,6 +58,8 @@ public class Call implements ISerializable {
 		out.write(method);
 		out.write(args);
 		out.write(expireTime);
+		out.write(id);
+		out.write(type);
 	}
 
 	@Override
@@ -67,5 +69,7 @@ public class Call implements ISerializable {
 		method = in.read();
 		args = in.read();
 		expireTime = in.read();
+		id = in.read();
+		type = in.read();
 	}
 }

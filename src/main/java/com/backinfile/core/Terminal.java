@@ -64,7 +64,7 @@ public class Terminal implements ITerminal {
 	}
 
 	@Override
-	public void returns(Object[] values) {
+	public void returns(Object... values) {
 		returns(lastInCall, values);
 	}
 
@@ -149,7 +149,11 @@ public class Terminal implements ITerminal {
 			Result result = new Result(call.args);
 			result.setError(call.type == Call.RPC_TYPE_CALL_RETURN_ERROR);
 			result.updateContexts(waitResult.contexts);
-			waitResult.callBackHandler.accept(result);
+			try {
+				waitResult.callBackHandler.accept(result);
+			} catch (Exception e) {
+				Log.Core.error("run rpc result callback function error", e);
+			}
 		}
 	}
 
@@ -159,16 +163,23 @@ public class Terminal implements ITerminal {
 	private void invoke(Call call) {
 		lastInCall = call;
 		IService service = mPort.getService(call.to.serviceID);
+
+		if (service == null) {
+			Log.Core.error("cannot find target service:{},{}", call.to.portID, call.to.serviceID);
+			return;
+		}
+
 		ProxyBase proxy = cachedProxy.get(call.to.portID);
 		if (proxy == null) {
+			String className = PackagePath + service.getClass().getSimpleName() + "Proxy";
 			try {
-				Class<?> clazz = Class.forName(PackagePath + service.getClass().getSimpleName() + "Proxy");
+				Class<?> clazz = Class.forName(className);
 				var c = clazz.getDeclaredConstructor(CallPoint.class);
 				c.setAccessible(true);
 				proxy = (ProxyBase) c.newInstance((Object) null);
 				cachedProxy.put(call.to.portID, proxy);
 			} catch (Exception e) {
-				Log.Core.error("find proxy class failed", e);
+				Log.Core.error("find proxy class failed:{}", className, e);
 			}
 		}
 

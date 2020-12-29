@@ -1,21 +1,21 @@
 package com.backinfile.world.rank;
 
-import java.util.ArrayList;
 
 import com.backinfile.core.AbstractService;
 import com.backinfile.core.ProxyMethod;
 import com.backinfile.core.StandAloneService;
-import com.backinfile.support.Log;
 
 @StandAloneService
 public class RankService extends AbstractService {
+	private int value = 0;
+
 	public RankService(long serviceId) {
 		super(serviceId);
 	}
 
 	@ProxyMethod
 	public void getTopHumanId() {
-		returns(123L);
+		returns(value++);
 	}
 
 //	@ProxyMethod
@@ -33,6 +33,5 @@ public class RankService extends AbstractService {
 
 	@Override
 	public void pulsePerSec() {
-		Log.Rank.info("pulse per sec");
 	}
 }
