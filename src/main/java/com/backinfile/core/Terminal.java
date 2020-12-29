@@ -2,10 +2,20 @@ package com.backinfile.core;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
+import com.backinfile.core.function.Action;
+import com.backinfile.core.function.Action0;
+import com.backinfile.core.function.Action1;
+import com.backinfile.core.function.Action2;
+import com.backinfile.core.function.Action3;
+import com.backinfile.core.function.Action4;
+import com.backinfile.core.function.Action5;
+import com.backinfile.core.function.Action6;
+import com.backinfile.core.function.Action7;
 import com.backinfile.support.Log;
 import com.backinfile.utils.Time2;
 
@@ -101,12 +111,12 @@ public class Terminal implements ITerminal {
 	}
 
 	@Override
-	public void listenLastOutCall(Consumer<IResult> consumer, Object[] context) {
+	public void listenLastOutCall(Consumer<IResult> consumer, Object... contexts) {
 		if (lastOutCall == null) {
 			Log.Core.error("没有上次调用， 不能监听");
 			return;
 		}
-		WaitResult waitResult = new WaitResult(consumer, context);
+		WaitResult waitResult = new WaitResult(consumer, contexts);
 		waitingResponseList.put(lastOutCall.id, waitResult);
 	}
 
@@ -143,17 +153,66 @@ public class Terminal implements ITerminal {
 		}
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private final Map<String, ProxyBase> cachedProxy = new HashMap<>();
+	private static final String PackagePath = "com.backinfile.gen.proxy.";
+
 	private void invoke(Call call) {
-//		lastInCall = call;
-//
-//		IService service = mPort.getService(call.to.serviceID);
-//		Method method = Distr.getMethodByString(call.method);
-//		try {
-//			method.invoke(service, call.args);
-//		} catch (Exception e) {
-//			Log.Core.error("error in invoke service method", e);
-//		}
+		lastInCall = call;
+		IService service = mPort.getService(call.to.serviceID);
+		ProxyBase proxy = cachedProxy.get(call.to.portID);
+		if (proxy == null) {
+			try {
+				Class<?> clazz = Class.forName(PackagePath + service.getClass().getSimpleName() + "Proxy");
+				var c = clazz.getDeclaredConstructor(CallPoint.class);
+				c.setAccessible(true);
+				proxy = (ProxyBase) c.newInstance((Object) null);
+				cachedProxy.put(call.to.portID, proxy);
+			} catch (Exception e) {
+				Log.Core.error("find proxy class failed", e);
+			}
+		}
+
+		if (proxy != null) {
+			Object method = proxy.getMethod(service, call.method);
+			try {
+				invoke(method, call.args);
+			} catch (Exception e) {
+				Log.Core.error("invoke service's method error", e);
+			}
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void invoke(Object method, Object[] args) {
+		switch (args.length) {
+		case 0:
+			((Action0) method).invoke();
+			break;
+		case 1:
+			((Action1) method).invoke(args[0]);
+			break;
+		case 2:
+			((Action2) method).invoke(args[0], args[1]);
+			break;
+		case 3:
+			((Action3) method).invoke(args[0], args[1], args[2]);
+			break;
+		case 4:
+			((Action4) method).invoke(args[0], args[1], args[2], args[3]);
+			break;
+		case 5:
+			((Action5) method).invoke(args[0], args[1], args[2], args[3], args[4]);
+			break;
+		case 6:
+			((Action6) method).invoke(args[0], args[1], args[2], args[3], args[4], args[5]);
+			break;
+		case 7:
+			((Action7) method).invoke(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+			break;
+		default:
+			Log.Core.error("rpc函数参数超长！");
+			break;
+		}
 	}
 
 	/*

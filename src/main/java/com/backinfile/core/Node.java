@@ -42,7 +42,7 @@ public class Node {
 				Port port = new Port(portId);
 				port.addService(service);
 				this.addPort(port);
-				Log.Core.info("{} start", service.getClass().getName());
+				Log.Core.info("{} start", portId);
 			} catch (Exception e) {
 				Log.Core.error("create service failed: " + clazz.getName(), e);
 			}
@@ -60,7 +60,7 @@ public class Node {
 	public void addPort(Port port) {
 		port.setNode(this);
 		portsWaitForRun.add(port);
-		allPorts.put(port.getClass().getName(), port);
+		allPorts.put(port.getPortId(), port);
 	}
 
 	private void dispatchRun() {
@@ -129,7 +129,7 @@ public class Node {
 
 		Port port = getPort(call.to.portID);
 		if (port == null) {
-			Log.Core.error("此call发送到未知port，已忽略");
+			Log.Core.error("此call发送到未知port({})，已忽略", call.to.portID);
 			return;
 		}
 

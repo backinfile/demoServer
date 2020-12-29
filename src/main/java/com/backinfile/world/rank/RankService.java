@@ -18,10 +18,10 @@ public class RankService extends AbstractService {
 		returns(123L);
 	}
 
-	@ProxyMethod
-	public void getTopHumanId(int num, int[] args, ArrayList<Integer> ints) {
-
-	}
+//	@ProxyMethod
+//	public void getTopHumanId(int num, int[] args, ArrayList<Integer> ints) {
+//
+//	}
 
 	@Override
 	public void startup() {

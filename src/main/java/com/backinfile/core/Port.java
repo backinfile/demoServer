@@ -224,8 +224,8 @@ public class Port implements Delayed, ITerminal {
 	}
 
 	@Override
-	public void listenLastOutCall(Consumer<IResult> consumer, Object... context) {
-		terminal.listenLastOutCall(consumer, context);
+	public void listenLastOutCall(Consumer<IResult> consumer, Object... contexts) {
+		terminal.listenLastOutCall(consumer, contexts);
 	}
 
 	@Override

@@ -1,0 +1,1 @@
+java -cp classes com.backinfile.core.gen.GenManager

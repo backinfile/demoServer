@@ -13,30 +13,24 @@ import com.backinfile.core.function.Action5;
 import com.backinfile.core.function.Action6;
 import com.backinfile.core.function.Action7;
 
-import com.backinfile.world.rank.RankService;
+import com.backinfile.world.human.HumanGlobalService;
 
-public class RankServiceProxy extends ProxyBase {
+public class HumanGlobalServiceProxy extends ProxyBase {
 	private CallPoint targetCallPoint;
 
-	private RankServiceProxy(CallPoint targetCallPoint) {
+	private HumanGlobalServiceProxy(CallPoint targetCallPoint) {
 		this.targetCallPoint = targetCallPoint;
 		this.m_port = Port.getCurrentPort();
 	}
 
-	public static RankServiceProxy newInstance() {
-		return new RankServiceProxy(new CallPoint(Distr.getDefaultNodeId(), "com.backinfile.world.rank.RankService", 0L));
+	public static HumanGlobalServiceProxy newInstance() {
+		return new HumanGlobalServiceProxy(new CallPoint(Distr.getDefaultNodeId(), "com.backinfile.world.human.HumanGlobalService", 0L));
 	}
 
-    public void getTopHumanId() {
-		m_port.sendNewCall(targetCallPoint, 936437763, new Object[] {});
-    }
-    
     @SuppressWarnings({"rawtypes"}) 
 	public Object getMethod(Object service, int methodKey) {
-		RankService serv = (RankService)service;
+		HumanGlobalService serv = (HumanGlobalService)service;
 		switch (methodKey) {
-		case 936437763:
-			return (Action0) serv::getTopHumanId;
 		default:
 			break;
 		}

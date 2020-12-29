@@ -4,6 +4,7 @@ import com.backinfile.core.CallPoint;
 import com.backinfile.core.Distr;
 import com.backinfile.core.Port;
 import com.backinfile.core.ProxyBase;
+import com.backinfile.core.function.Action0;
 import com.backinfile.core.function.Action1;
 import com.backinfile.core.function.Action2;
 import com.backinfile.core.function.Action3;
@@ -25,11 +26,11 @@ public class ${className} extends ProxyBase {
 	}
 
 <#if standalone>
-	public ${className} newInstance() {
+	public static ${className} newInstance() {
 		return new ${className}(new CallPoint(Distr.getDefaultNodeId(), "${oriClassFullName}", 0L));
 	}
 <#else>
-	public ${className} newInstance(long serviceId) {
+	public static ${className} newInstance(long serviceId) {
 		return new ${className}(new CallPoint(Distr.getDefaultNodeId(), "${oriClassFullName}", serviceId));
 	}
 </#if>
@@ -44,11 +45,12 @@ public class ${className} extends ProxyBase {
     
 </#list>
     @SuppressWarnings({"rawtypes"}) 
-	public Object getMethod(int methodKey) {
+	public Object getMethod(Object service, int methodKey) {
+		${oriClassName} serv = (${oriClassName})service;
 		switch (methodKey) {
 <#list methods as method>
 		case ${method.methodKey}:
-			return (Action${method.argsCount + 1}<${oriClassName}<#if method.argsCount gt 0>, </#if><#list method.args as arg>${arg.wrapName}${arg.dot}</#list>>) ${oriClassName}::${method.name};
+			return (Action${method.argsCount}<#if method.argsCount gt 0><<#list method.args as arg>${arg.wrapName}${arg.dot}</#list>></#if>) serv::${method.name};
 </#list>
 		default:
 			break;
