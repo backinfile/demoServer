@@ -9,6 +9,7 @@ import java.util.Map;
 import com.backinfile.core.Params;
 import com.backinfile.core.function.Action1;
 import com.backinfile.core.function.Function;
+import com.backinfile.gen.proxy.ListenerBinder;
 import com.backinfile.support.Log;
 
 public class EventManager {
@@ -39,6 +40,10 @@ public class EventManager {
 		collectors.add(collector);
 	}
 
+	public static void fire(int eventKey, Object... params) {
+		fire(eventKey, new Params(params));
+	}
+
 	public static void fire(int eventKey, Params params) {
 		var list = eventMap.get(eventKey);
 		if (list == null) {
@@ -51,5 +56,9 @@ public class EventManager {
 				Log.Core.error("run event listener function error", e);
 			}
 		}
+	}
+
+	static {
+		addCollector(ListenerBinder::getEventListeners);
 	}
 }

@@ -18,8 +18,4 @@ public class ListenerBinder {
 </#list>
 		return list;
 	}
-
-	static {
-		EventManager.addCollector(ListenerBinder::getEventListeners);
-	}
 }

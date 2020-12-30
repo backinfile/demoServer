@@ -14,8 +14,4 @@ public class ListenerBinder {
 		list.add(new ListenerObject(2000, HumanGlobalService::onHumanInit));
 		return list;
 	}
-
-	static {
-		EventManager.addCollector(ListenerBinder::getEventListeners);
-	}
 }
