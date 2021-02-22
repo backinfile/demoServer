@@ -30,7 +30,7 @@ public class HumanGlobalService extends AbstractService {
 	}
 
 	@Override
-	public void pulse() {
+	public void pulse() {      
 
 	}
 
@@ -51,7 +51,7 @@ public class HumanGlobalService extends AbstractService {
 			HumanServiceProxy proxy2 = HumanServiceProxy.newInstance(HumanGlobalServiceProxy.PortId, 3);
 			proxy2.printSelf();
 
-			EventManager.fire(EventKey.HUMAN_INIT, new Params("hahah"));
+			EventManager.fire(EventKey.HUMAN_INIT, "hahah");
 		}
 	}
 
