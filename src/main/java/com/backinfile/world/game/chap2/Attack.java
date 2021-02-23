@@ -11,5 +11,10 @@ public class Attack extends ActionCard {
 	public Attack(Board board) {
 		super(board, SN, CHAPTER);
 	}
+	
+	@Override
+	public boolean canUse() {
+		return super.canUse();
+	}
 
 }

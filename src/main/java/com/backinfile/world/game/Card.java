@@ -12,7 +12,7 @@ public abstract class Card {
 	}
 
 	public boolean canUse() {
-		return false;
+		return true;
 	}
 
 	public void use() {

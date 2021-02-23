@@ -1,7 +1,12 @@
 package com.backinfile.world.game;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+
+import com.backinfile.core.function.Action1;
+import com.backinfile.core.function.Function1;
 
 public class CardGroup {
 
@@ -30,5 +35,64 @@ public class CardGroup {
 
 	public int size() {
 		return cards.size();
+	}
+
+	public Card getTop() {
+		if (cards.isEmpty()) {
+			return null;
+		}
+		return cards.get(0);
+	}
+
+	public void remove(Card card) {
+		cards.remove(card);
+	}
+
+	public List<Card> take(int n) {
+		List<Card> takes = new ArrayList<>();
+		for (int i = 0; i < n; i++) {
+			if (!cards.isEmpty()) {
+				takes.add(cards.pollFirst());
+			} else {
+				break;
+			}
+		}
+		return takes;
+	}
+
+	public List<Card> takeRandom(int n, Random random) {
+		List<Card> takes = new ArrayList<>();
+		for (int i = 0; i < n; i++) {
+			if (!cards.isEmpty()) {
+				takes.add(cards.remove(random.nextInt(cards.size())));
+			} else {
+				break;
+			}
+		}
+		return takes;
+	}
+
+	public void forEach(Action1<Card> action) {
+		for (int i = 0; i < cards.size(); i++) {
+			action.invoke(cards.get(i));
+		}
+	}
+
+	public boolean any(Function1<Card, Boolean> function) {
+		for (int i = 0; i < cards.size(); i++) {
+			if (function.invoke(cards.get(i))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean all(Function1<Card, Boolean> function) {
+		for (int i = 0; i < cards.size(); i++) {
+			if (!function.invoke(cards.get(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

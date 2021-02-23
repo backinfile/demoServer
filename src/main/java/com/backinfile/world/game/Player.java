@@ -6,9 +6,19 @@ import java.util.List;
 public class Player {
 	public int chapter;
 	private Board board;
-	public CardGroup handPile;
-	public CardGroup drawPile;
-	public CardGroup disCardPile;
+	public CardGroup handPile = new CardGroup();
+	public CardGroup drawPile = new CardGroup();
+	public CardGroup discardPile = new CardGroup();
+	public CardGroup reviewPile = new CardGroup();
+	public CardGroup markPile = new CardGroup();
+	
+	public CardGroup battleSealPile = new CardGroup(5);
+	public CardGroup battleStoreUnreadyPile = new CardGroup(5);
+	public CardGroup battleStoreReadyPile = new CardGroup(5);
+	public CardGroup battleHarassPile = new CardGroup(5);
+	public CardGroup battleRidePile = new CardGroup(5);
+
+	public boolean isPlanCardHide = true; // 计划牌是隐藏状态
 
 	public Player(Board board, int chapter) {
 		this.board = board;
@@ -40,5 +50,23 @@ public class Player {
 			boolean inPlan) {
 		List<Card> cards = new ArrayList<>();
 		return cards;
+	}
+
+	public Card getPlanCard() {
+		Card card = null;
+		if (card == null) {
+			card = battleStoreReadyPile.get(ConstGame.PlanCardPos);
+		}
+		if (card == null) {
+			card = battleStoreUnreadyPile.get(ConstGame.PlanCardPos);
+		}
+		if (card == null) {
+			card = battleSealPile.get(ConstGame.PlanCardPos);
+		}
+		return card;
+	}
+
+	public boolean isDead() {
+		return !battleSealPile.any(card -> card == null);
 	}
 }
