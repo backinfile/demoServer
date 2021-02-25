@@ -3,19 +3,21 @@ package com.backinfile.world.game;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import com.backinfile.core.function.Action1;
 import com.backinfile.core.function.Function1;
 
 public class CardGroup {
 
+	private Player player;
 	private LinkedList<Card> cards = new LinkedList<Card>();
 
-	public CardGroup() {
+	public CardGroup(Player player) {
+		this.player = player;
 	}
 
-	public CardGroup(int num) {
+	public CardGroup(Player player, int num) {
+		this(player);
 		for (int i = 0; i < num; i++) {
 			cards.add(null);
 		}
@@ -44,8 +46,23 @@ public class CardGroup {
 		return cards.get(0);
 	}
 
-	public void remove(Card card) {
-		cards.remove(card);
+	public boolean remove(Card card) {
+		return cards.remove(card);
+	}
+
+	public Card remove(int pos) {
+		Card card = cards.get(pos);
+		cards.set(pos, null);
+		return card;
+	}
+
+	public int indexOf(Card card) {
+		for (int i = 0; i < cards.size(); i++) {
+			if (card == cards.get(i)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public List<Card> take(int n) {
@@ -60,11 +77,11 @@ public class CardGroup {
 		return takes;
 	}
 
-	public List<Card> takeRandom(int n, Random random) {
+	public List<Card> takeRandom(int n) {
 		List<Card> takes = new ArrayList<>();
 		for (int i = 0; i < n; i++) {
 			if (!cards.isEmpty()) {
-				takes.add(cards.remove(random.nextInt(cards.size())));
+				takes.add(cards.remove(player.board.random.nextInt(cards.size())));
 			} else {
 				break;
 			}
@@ -94,5 +111,17 @@ public class CardGroup {
 			}
 		}
 		return true;
+	}
+
+	public void shuffle() {
+		if (cards.isEmpty()) {
+			return;
+		}
+		for (int i = 0; i < cards.size(); i++) {
+			int rnd = player.board.random.nextInt(cards.size());
+			Card tmp = cards.get(i);
+			cards.set(i, cards.get(rnd));
+			cards.set(rnd, tmp);
+		}
 	}
 }
